@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <style>
+        /* Same styling as before */
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Admin Panel</h1>
+    </header>
+    <main>
+        <h2>Add New Items</h2>
+        <form id="adminForm">
+            <label for="item">Item Name:</label>
+            <input type="text" id="adminItem" name="item" required>
+
+            <label for="price">Price:</label>
+            <input type="number" id="adminPrice" name="price" step="0.01" required>
+
+            <button type="button" onclick="addItem()">Add Item</button>
+        </form>
+        <p id="adminResponse"></p>
+    </main>
+
+    <script>
+        const items = JSON.parse(localStorage.getItem('items')) || [];
+
+        function addItem() {
+            const itemName = document.getElementById("adminItem").value;
+            const itemPrice = document.getElementById("adminPrice").value;
+
+            if (itemName && itemPrice) {
+                items.push({ name: itemName, price: parseFloat(itemPrice) });
+                localStorage.setItem('items', JSON.stringify(items)); // Save items to local storage
+                document.getElementById("adminResponse").innerText = "Item added successfully!";
+                document.getElementById("adminForm").reset();
+            } else {
+                document.getElementById("adminResponse").innerText = "Please fill out all fields.";
+            }
+        }
+    </script>
+</body>
+</html>

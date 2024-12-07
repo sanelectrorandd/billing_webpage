@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Trigger</title>
+    <script>
+        function triggerAPI() {
+            // Define the API URL
+            const apiUrl = 'https://script.google.com/macros/s/AKfycbxeyqI0iZ9l9XVxe1_AIdwErdCANCBAUAX5L-k84QeIsOD6OfeEwybUqoEyJo-Ugsox/exec?status=Test';
+            
+            // Make a GET request to the API
+            fetch(apiUrl, { method: 'GET' })
+                .then(response => response.json())  // Parse the JSON response
+                .then(data => {
+                    document.getElementById("response").innerHTML = "API Triggered: " + data.status; // Display the response
+                })
+                .catch(error => {
+                    console.error('Error:', error);  // Log any errors in the console
+                    document.getElementById("response").innerHTML = "Error occurred!";
+                });
+        }
+    </script>
+</head>
+<body>
+    <h1>Trigger Google Apps Script API</h1>
+    <button onclick="triggerAPI()">Trigger API</button>
+    <p id="response"></p> <!-- Display the response here -->
+</body>
+</html>

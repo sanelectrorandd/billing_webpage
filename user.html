@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Panel</title>
+    <style>
+        /* Same styling as before */
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Panel</h1>
+    </header>
+    <main>
+        <h2>Available Items</h2>
+        <form id="userForm">
+            <label for="selectedItem">Select Item:</label>
+            <select id="selectedItem" name="selectedItem" required>
+                <!-- Items will be populated here -->
+            </select>
+
+            <label for="quantity">Enter Quantity:</label>
+            <input type="number" id="userQuantity" name="quantity" required>
+
+            <button type="button" onclick="purchaseItem()">Send</button>
+        </form>
+        <p id="userResponse"></p>
+    </main>
+
+    <script>
+        function populateItems() {
+            const items = JSON.parse(localStorage.getItem('items')) || [];
+            const select = document.getElementById("selectedItem");
+    
+            select.innerHTML = ''; // Clear existing options
+            items.forEach((item, index) => {
+                const option = document.createElement("option");
+                option.value = JSON.stringify(item); // Save item data as value
+                option.innerText = `${item.name} - $${item.price.toFixed(2)}`;
+                select.appendChild(option);
+            });
+        }
+    
+        function purchaseItem() {
+            const selectedItem = JSON.parse(document.getElementById("selectedItem").value);
+            const quantity = document.getElementById("userQuantity").value;
+    
+            if (selectedItem && quantity) {
+                const apiUrl = "https://script.google.com/macros/s/AKfycby1YAQ5R8lnILJ5Jx4aRfxDw6jRgAt9rJzkx4DTKMRvbiRIF7Bhkn8prKoCunUgz6yRCQ/exec";
+                const params = new URLSearchParams({
+                    item: selectedItem.name,
+                    price: selectedItem.price,
+                    quantity: quantity,
+                });
+    
+                // Trigger API call
+                fetch(`${apiUrl}?${params.toString()}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById("userResponse").innerText = "Response: " + data;
+                    })
+                    .catch(error => {
+                        document.getElementById("userResponse").innerText = "Error: " + error.message;
+                    });
+            } else {
+                document.getElementById("userResponse").innerText = "Please select an item and enter quantity.";
+            }
+        }
+    
+        // Populate items on page load
+        populateItems();
+    </script>
+    
+</body>
+</html>
